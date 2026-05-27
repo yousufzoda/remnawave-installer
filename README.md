@@ -13,8 +13,10 @@ Automated installer for [Remnawave](https://remna.st) VPN panel + XRAY node.
 ## Quick start (via curl)
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/yousufzoda/remnawave-installer/main/remnawave.sh)
+curl -Ls https://raw.githubusercontent.com/yousufzoda/remnawave-installer/main/remnawave.sh -o /tmp/remnawave.sh && bash /tmp/remnawave.sh
 ```
+
+> **Note:** `bash <(curl ...)` (process substitution) requires `/dev/fd` which is unavailable on some VPS. Use the command above instead.
 
 After first run the script installs itself as `remnawave` command:
 ```bash
