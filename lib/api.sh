@@ -2,7 +2,7 @@
 # Module: Remnawave REST API helpers
 
 _api() {
-    local method="$1" url="$2" token="$3" data="$4"
+    local method="$1" url="$2" token="$3" data="${4:-}"
     local args=(
         -s -X "$method" "$url"
         -H "Authorization: Bearer $token"

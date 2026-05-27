@@ -3,6 +3,12 @@
 set -euo pipefail
 
 SCRIPT_VERSION="1.0.0"
+
+if [[ $EUID -ne 0 ]]; then
+    echo "Error: This script must be run as root (sudo bash ...)." >&2
+    exit 1
+fi
+
 RW_DIR="/usr/local/remnawave"
 LANG_FILE="${RW_DIR}/language"
 LIB_DIR="${RW_DIR}/lib"
@@ -71,7 +77,7 @@ _install_shortcut() {
     # Copy main script to persistent location
     local target="${RW_DIR}/remnawave.sh"
     if [ ! -f "$target" ] || [ "$(realpath "${BASH_SOURCE[0]}" 2>/dev/null)" != "$(realpath "$target" 2>/dev/null)" ]; then
-        if [ -f "${SCRIPT_DIR}/remnawave.sh" ] && [[ "${BASH_SOURCE[0]}" != /dev/fd/* ]]; then
+        if [ -f "${BASH_SOURCE[0]}" ] && [ -f "${SCRIPT_DIR}/remnawave.sh" ]; then
             cp "${SCRIPT_DIR}/remnawave.sh" "$target"
         else
             # Downloaded via curl — save this script
