@@ -12,7 +12,7 @@ install_node() {
     # SelfSteal domain
     while true; do
         reading "${LANG[ENTER_SELFSTEAL_DOMAIN]}" SELFSTEAL_DOMAIN
-        local rc; check_domain "$SELFSTEAL_DOMAIN" false; rc=$?
+        local rc=0; check_domain "$SELFSTEAL_DOMAIN" false || rc=$?
         [ $rc -eq 2 ] && exit 0
         break
     done

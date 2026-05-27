@@ -502,7 +502,7 @@ check_domain() {
     return 2
 }
 
-check_root() { [[ $EUID -ne 0 ]] && error "${LANG[ERROR_ROOT]}"; }
+check_root() { if [[ $EUID -ne 0 ]]; then error "${LANG[ERROR_ROOT]}"; fi; }
 
 check_os() {
     grep -qE "bullseye|bookworm|jammy|noble|trixie" /etc/os-release 2>/dev/null \
@@ -511,7 +511,7 @@ check_os() {
 
 add_cron_rule() {
     local rule="$1"
-    crontab -u root -l 2>/dev/null | grep -Fq "$rule" && return
+    if crontab -u root -l 2>/dev/null | grep -Fq "$rule"; then return 0; fi
     (crontab -u root -l 2>/dev/null; echo "$rule") | crontab -u root -
 }
 

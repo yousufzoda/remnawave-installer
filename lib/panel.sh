@@ -12,7 +12,7 @@ install_panel() {
     # Panel domain
     while true; do
         reading "${LANG[ENTER_PANEL_DOMAIN]}" PANEL_DOMAIN
-        local rc; check_domain "$PANEL_DOMAIN" true; rc=$?
+        local rc=0; check_domain "$PANEL_DOMAIN" true || rc=$?
         [ $rc -eq 2 ] && exit 0
         break
     done
@@ -20,7 +20,7 @@ install_panel() {
     # Sub domain
     while true; do
         reading "${LANG[ENTER_SUB_DOMAIN]}" SUB_DOMAIN
-        local rc; check_domain "$SUB_DOMAIN" true; rc=$?
+        local rc=0; check_domain "$SUB_DOMAIN" true || rc=$?
         [ $rc -eq 2 ] && exit 0
         [ "$SUB_DOMAIN" = "$PANEL_DOMAIN" ] && { warn "${LANG[DOMAINS_MUST_BE_UNIQUE]}"; continue; }
         break
@@ -29,7 +29,7 @@ install_panel() {
     # SelfSteal domain (used in XRAY config profile; the node runs on this domain)
     while true; do
         reading "${LANG[ENTER_SELFSTEAL_DOMAIN]}" SELFSTEAL_DOMAIN
-        local rc; check_domain "$SELFSTEAL_DOMAIN" false; rc=$?
+        local rc=0; check_domain "$SELFSTEAL_DOMAIN" false || rc=$?
         [ $rc -eq 2 ] && exit 0
         [ "$SELFSTEAL_DOMAIN" = "$PANEL_DOMAIN" ] || [ "$SELFSTEAL_DOMAIN" = "$SUB_DOMAIN" ] \
             && { warn "${LANG[DOMAINS_MUST_BE_UNIQUE]}"; continue; }
