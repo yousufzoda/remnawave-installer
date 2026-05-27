@@ -2,7 +2,7 @@
 # Remnawave Installer — modular, self-contained
 set -euo pipefail
 
-SCRIPT_VERSION="1.0.0"
+SCRIPT_VERSION="1.0.2"
 
 if [[ $EUID -ne 0 ]]; then
     echo "Error: This script must be run as root (sudo bash ...)." >&2
@@ -22,6 +22,12 @@ MODULES=(core packages certs api panel node add_node manage)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd 2>/dev/null)" || SCRIPT_DIR=""
 LOCAL_LIB="${SCRIPT_DIR}/lib"
+
+# Invalidate cached libs when script version changes
+VERSION_FILE="${RW_DIR}/.lib_version"
+if [ -f "$VERSION_FILE" ] && [ "$(cat "$VERSION_FILE" 2>/dev/null)" != "$SCRIPT_VERSION" ]; then
+    rm -rf "$LIB_DIR"
+fi
 
 _download_lib() {
     local mod="$1"
@@ -69,6 +75,7 @@ _load_modules() {
 }
 
 _load_modules
+mkdir -p "$RW_DIR" && echo "$SCRIPT_VERSION" > "$VERSION_FILE"
 
 # ── Install script to /usr/local/bin so user can type `remnawave` ─────────────
 _install_shortcut() {
